@@ -66,8 +66,8 @@ export default async function Home() {
       {/* ── Spray paint mesh corners ── */}
       <div className="pointer-events-none fixed inset-0 z-0" aria-hidden="true">
         {/* Top-left corner */}
-        <div className="absolute -top-8 -left-8 w-72 h-72 sm:w-96 sm:h-96">
-          <svg viewBox="0 0 400 400" className="w-full h-full opacity-[0.12]">
+        <div className="absolute -top-16 -left-16 w-96 h-96 sm:w-[500px] sm:h-[500px]">
+          <svg viewBox="0 0 400 400" className="w-full h-full opacity-[0.35]">
             <defs>
               <filter id="spray-tl">
                 <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" result="noise" />
@@ -107,8 +107,8 @@ export default async function Home() {
           </svg>
         </div>
         {/* Bottom-right corner */}
-        <div className="absolute -bottom-8 -right-8 w-72 h-72 sm:w-96 sm:h-96">
-          <svg viewBox="0 0 400 400" className="w-full h-full opacity-[0.12]">
+        <div className="absolute -bottom-16 -right-16 w-96 h-96 sm:w-[500px] sm:h-[500px]">
+          <svg viewBox="0 0 400 400" className="w-full h-full opacity-[0.35]">
             <defs>
               <filter id="spray-br">
                 <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" result="noise" />
