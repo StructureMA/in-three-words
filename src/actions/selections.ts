@@ -3,6 +3,7 @@
 import { createClient } from "@/lib/supabase/server";
 import { generatePaymentToken, getCurrentWeekMonday } from "@/lib/utils";
 import { revalidatePath } from "next/cache";
+import type { Entry } from "@/lib/types";
 
 export interface DrawEntryState {
   success: boolean;
@@ -123,4 +124,72 @@ export async function drawEntry(): Promise<DrawEntryState> {
       size: chosen.size,
     },
   };
+}
+
+export async function approveAndNotify(
+  selectionId: string
+): Promise<{ success: boolean; error: string | null }> {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { success: false, error: "Not authenticated" };
+
+  // Get the selection with entry data
+  const { data: selection } = await supabase
+    .from("selections")
+    .select("*, entries!inner(*)")
+    .eq("id", selectionId)
+    .single();
+
+  if (!selection) return { success: false, error: "Selection not found" };
+  if (selection.status !== "drawn") {
+    return { success: false, error: "Selection already notified" };
+  }
+
+  // Get venmo handle from settings
+  const { data: venmoSetting } = await supabase
+    .from("site_settings")
+    .select("value")
+    .eq("key", "venmo_handle")
+    .single();
+
+  const entry = selection.entries as Entry;
+  const words = [entry.word_1, entry.word_2, entry.word_3, entry.word_4].filter(
+    (w: string | null): w is string => w !== null && w.trim() !== ""
+  );
+
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
+  const paymentUrl = `${baseUrl}/pay/${selection.payment_token}`;
+
+  // Send SMS via Plivo
+  const { sendSelectionSMS } = await import("@/lib/sms");
+  const smsResult = await sendSelectionSMS({
+    to: entry.phone,
+    name: entry.name,
+    words,
+    paymentUrl,
+    venmoHandle: venmoSetting?.value || "",
+  });
+
+  if (!smsResult.success) {
+    return { success: false, error: `SMS failed: ${smsResult.error}` };
+  }
+
+  // Update selection status with 3-hour expiry
+  const now = new Date();
+  const expiresAt = new Date(now.getTime() + 3 * 60 * 60 * 1000);
+
+  await supabase
+    .from("selections")
+    .update({
+      status: "notified",
+      notified_at: now.toISOString(),
+      expires_at: expiresAt.toISOString(),
+    })
+    .eq("id", selectionId);
+
+  revalidatePath("/admin/entries");
+  return { success: true, error: null };
 }
