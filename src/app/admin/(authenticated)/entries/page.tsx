@@ -2,6 +2,7 @@ import { createClient } from "@/lib/supabase/server";
 import { getCurrentWeekMonday, getWords, formatPhone } from "@/lib/utils";
 import type { Entry, SelectionWithEntry } from "@/lib/types";
 import DrawEntryButton from "./draw-entry-button";
+import SelectionActions from "./selection-actions";
 
 export default async function AdminEntriesPage() {
   const supabase = await createClient();
@@ -67,12 +68,11 @@ export default async function AdminEntriesPage() {
               )
             )}
           </div>
-          <div className="text-xs text-[#6B6B6B]">
-            Status:{" "}
-            <span className="font-semibold text-[#1A1A1A]">
-              {activeSelection.status}
-            </span>
-          </div>
+          <SelectionActions
+            selectionId={activeSelection.id}
+            status={activeSelection.status}
+            expiresAt={activeSelection.expires_at}
+          />
         </div>
       )}
 
