@@ -10,7 +10,6 @@ export interface DrawEntryState {
   drawnEntry: {
     id: string;
     name: string;
-    phone: string;
     words: string[];
     size: string;
   } | null;
@@ -120,7 +119,6 @@ export async function drawEntry(): Promise<DrawEntryState> {
     drawnEntry: {
       id: chosen.id,
       name: chosen.name,
-      phone: chosen.phone,
       words,
       size: chosen.size,
     },
