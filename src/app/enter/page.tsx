@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import Link from "next/link";
 import { submitEntry, type SubmitEntryState } from "@/actions/entries";
 
@@ -11,6 +11,7 @@ export default function EnterPage() {
     submitEntry,
     initialState
   );
+  const [charityPreference, setCharityPreference] = useState("");
 
   if (state.success) {
     return (
@@ -121,6 +122,39 @@ export default function EnterPage() {
               maxLength={500}
               className="w-full px-4 py-3 border border-[#E8E6E3] rounded-lg bg-white text-[#1A1A1A] placeholder-[#999] focus:outline-none focus:border-[#2E6B8A] transition-colors resize-none"
             />
+          </div>
+
+          {/* Charity Preference */}
+          <div>
+            <label className="block text-xs font-semibold uppercase tracking-wider text-[#2E6B8A] mb-3">
+              What cause matters to you? (optional)
+            </label>
+            <select
+              name="charity_preference"
+              value={charityPreference}
+              onChange={(e) => setCharityPreference(e.target.value)}
+              className="w-full px-4 py-3 border border-[#E8E6E3] rounded-lg bg-white text-[#1A1A1A] focus:outline-none focus:border-[#2E6B8A] transition-colors"
+            >
+              <option value="">Pick a cause...</option>
+              <option value="children_youth">Children &amp; Youth</option>
+              <option value="hunger_food">Hunger &amp; Food Security</option>
+              <option value="animal_welfare">Animal Welfare</option>
+              <option value="housing_homelessness">Housing &amp; Homelessness</option>
+              <option value="health_medical">Health &amp; Medical Research</option>
+              <option value="environment_climate">Environment &amp; Climate</option>
+              <option value="education">Education</option>
+              <option value="veterans_military">Veterans &amp; Military Families</option>
+              <option value="other">Other</option>
+            </select>
+            {charityPreference === "other" && (
+              <input
+                type="text"
+                name="charity_other"
+                placeholder="Which charity or cause?"
+                maxLength={200}
+                className="w-full mt-3 px-4 py-3 border border-[#E8E6E3] rounded-lg bg-white text-[#1A1A1A] placeholder-[#999] focus:outline-none focus:border-[#2E6B8A] transition-colors"
+              />
+            )}
           </div>
 
           {/* Size */}

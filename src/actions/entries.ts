@@ -20,6 +20,8 @@ export async function submitEntry(
   const word4 = (formData.get("word_4") as string) || null;
   const size = formData.get("size") as string;
   const comment = (formData.get("comment") as string) || null;
+  const charityPreference = (formData.get("charity_preference") as string) || null;
+  const charityOther = (formData.get("charity_other") as string) || null;
 
   if (!name || !phone || !word1 || !word2 || !size) {
     return { success: false, error: "Please fill in all required fields." };
@@ -45,6 +47,7 @@ export async function submitEntry(
     word_4: word4?.trim().toLowerCase() || null,
     size,
     comment: comment?.trim() || null,
+    charity_preference: charityPreference === "other" ? charityOther?.trim() || "other" : charityPreference,
     week_of: getCurrentWeekMonday(),
   });
 
