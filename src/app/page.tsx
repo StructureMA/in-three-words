@@ -2,7 +2,7 @@ import Link from "next/link";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { getCurrentWeekMonday, getWords } from "@/lib/utils";
 import EntryCountdown from "@/components/entry-countdown";
-import type { Entry, Painting, Selection, Charity } from "@/lib/types";
+import type { Entry, Painting, Selection } from "@/lib/types";
 
 interface PaintingWithDetails extends Painting {
   selections: Selection & {
