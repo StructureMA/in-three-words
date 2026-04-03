@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>In Three Words — Original Art for a Cause</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300;1,9..40,400&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap');
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg: #FAFAF8;
+      --text: #1A1A1A;
+      --muted: #6B6B6B;
+      --accent: #2E6B8A;
+      --accent-light: #E8F1F5;
+      --warm: #D4A574;
+      --card: #FFFFFF;
+      --border: #E8E6E3;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* NAV */
+    nav {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      background: rgba(250, 250, 248, 0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+      z-index: 100;
+      padding: 1rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    nav .logo {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--accent);
+      letter-spacing: -0.02em;
+    }
+    nav .nav-links {
+      display: flex;
+      gap: 2rem;
+      list-style: none;
+    }
+    nav .nav-links a {
+      text-decoration: none;
+      color: var(--muted);
+      font-size: 0.9rem;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    nav .nav-links a:hover { color: var(--accent); }
+
+    /* HERO */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 8rem 2rem 4rem;
+      position: relative;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 100%;
+      background: radial-gradient(ellipse at 50% 20%, rgba(46, 107, 138, 0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .hero-tag {
+      font-size: 0.85rem;
+      font-weight: 500;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(3rem, 7vw, 5.5rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.03em;
+      margin-bottom: 1.5rem;
+      color: var(--text);
+    }
+    .hero h1 em {
+      color: var(--accent);
+      font-style: italic;
+    }
+    .hero p {
+      font-size: 1.2rem;
+      color: var(--muted);
+      max-width: 540px;
+      margin-bottom: 2.5rem;
+    }
+    .cta-btn {
+      display: inline-block;
+      background: var(--accent);
+      color: #fff;
+      padding: 1rem 2.5rem;
+      border-radius: 6px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 1rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(46, 107, 138, 0.25);
+    }
+    .cta-secondary {
+      display: inline-block;
+      color: var(--muted);
+      padding: 1rem 1.5rem;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 0.95rem;
+      transition: color 0.2s;
+    }
+    .cta-secondary:hover { color: var(--accent); }
+
+    /* SECTIONS */
+    section {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 5rem 2rem;
+    }
+    .section-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-bottom: 0.75rem;
+    }
+    section h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.02em;
+    }
+    section > p {
+      color: var(--muted);
+      font-size: 1.1rem;
+      max-width: 640px;
+    }
+
+    /* HOW IT WORKS */
+    .steps {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+    .step {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 2rem;
+      position: relative;
+    }
+    .step-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--accent-light);
+      line-height: 1;
+      margin-bottom: 0.75rem;
+    }
+    .step h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+    .step p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    /* PRICING */
+    .pricing-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      margin-top: 3rem;
+    }
+    .price-card {
+      background: var(--card);
+      border: 2px solid var(--border);
+      border-radius: 16px;
+      padding: 2.5rem;
+      text-align: center;
+      transition: border-color 0.3s, transform 0.2s;
+    }
+    .price-card:hover {
+      border-color: var(--accent);
+      transform: translateY(-4px);
+    }
+    .price-card .tier-name {
+      font-weight: 600;
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--muted);
+      margin-bottom: 0.5rem;
+    }
+    .price-card .size {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.3rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+    }
+    .price-card .price {
+      font-size: 3rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin-bottom: 0.25rem;
+    }
+    .price-card .charity-note {
+      font-size: 0.9rem;
+      color: var(--warm);
+      font-weight: 500;
+      margin-bottom: 1.5rem;
+    }
+    .price-card .includes {
+      list-style: none;
+      text-align: left;
+      font-size: 0.95rem;
+      color: var(--muted);
+    }
+    .price-card .includes li {
+      padding: 0.4rem 0;
+      border-top: 1px solid var(--border);
+    }
+    .price-card .includes li::before {
+      content: '\2713';
+      color: var(--accent);
+      font-weight: 700;
+      margin-right: 0.5rem;
+    }
+
+    /* THIS WEEK BANNER */
+    .week-banner {
+      background: var(--card);
+      border: 2px solid var(--accent);
+      border-radius: 16px;
+      padding: 2.5rem;
+      text-align: center;
+      margin: 2rem 0;
+    }
+    .week-banner .week-label {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-bottom: 0.5rem;
+    }
+    .week-banner .winner-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 0.25rem;
+    }
+    .week-banner .winner-location {
+      font-size: 1rem;
+      color: var(--muted);
+      margin-bottom: 1rem;
+    }
+    .week-banner .winner-words {
+      display: inline-flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .week-banner .winner-words span {
+      background: var(--accent-light);
+      color: var(--accent);
+      font-weight: 600;
+      font-size: 0.85rem;
+      padding: 0.35rem 0.9rem;
+      border-radius: 20px;
+      letter-spacing: 0.02em;
+    }
+    .week-banner .entries-status {
+      margin-top: 1.25rem;
+      font-size: 0.95rem;
+      color: var(--warm);
+      font-weight: 500;
+    }
+
+    /* CHARITY BANNER */
+    .charity-banner {
+      background: var(--accent);
+      color: #fff;
+      text-align: center;
+      padding: 4rem 2rem;
+      margin: 2rem 0;
+      border-radius: 16px;
+    }
+    .charity-banner h2 {
+      font-family: 'Playfair Display', serif;
+      color: #fff;
+      margin-bottom: 1rem;
+    }
+    .charity-banner p {
+      color: rgba(255,255,255,0.85);
+      font-size: 1.1rem;
+      max-width: 560px;
+      margin: 0 auto;
+    }
+
+    /* FAQ */
+    .faq-list {
+      margin-top: 2rem;
+    }
+    .faq-item {
+      border-bottom: 1px solid var(--border);
+      padding: 1.5rem 0;
+    }
+    .faq-item h3 {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      cursor: pointer;
+    }
+    .faq-item p {
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    /* FINAL CTA */
+    .final-cta {
+      text-align: center;
+      padding: 6rem 2rem;
+    }
+    .final-cta h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    .final-cta p {
+      color: var(--muted);
+      font-size: 1.1rem;
+      margin: 0 auto 2rem;
+      max-width: 480px;
+    }
+
+    /* FOOTER */
+    footer {
+      text-align: center;
+      padding: 2rem;
+      color: var(--muted);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--border);
+    }
+
+    /* MOBILE */
+    @media (max-width: 640px) {
+      nav .nav-links { gap: 1rem; }
+      nav .nav-links a { font-size: 0.8rem; }
+      .hero { padding: 7rem 1.5rem 3rem; }
+      section { padding: 3rem 1.5rem; }
+      .steps { grid-template-columns: 1fr; }
+      .pricing-cards { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav>
+    <div class="logo">In Three Words</div>
+    <ul class="nav-links">
+      <li><a href="#how">How it works</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#faq">FAQ</a></li>
+      <li><a href="#enter" style="color: var(--accent); font-weight: 600;">Enter</a></li>
+    </ul>
+  </nav>
+
+  <!-- HERO -->
+  <div class="hero">
+    <div class="hero-tag">Original acrylic art &middot; Made for you &middot; For a cause</div>
+    <h1>Give me three words.<br>I'll paint <em>you</em> a painting.</h1>
+    <p>Each week, one stranger is selected. You choose three words. I interpret them on canvas. A portion goes to charity. You get the original, shipped to your door.</p>
+    <div>
+      <a href="#enter" class="cta-btn">Enter this week's selection</a>
+      <a href="#how" class="cta-secondary">See how it works &darr;</a>
+    </div>
+  </div>
+
+  <!-- HOW IT WORKS -->
+  <section id="how">
+    <div class="section-label">The Process</div>
+    <h2>Five steps. One painting per week.</h2>
+    <p>Every painting starts with three words from a stranger and ends with original art on your wall.</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-number">01</div>
+        <h3>Enter your three words</h3>
+        <p>Submit your name, phone number, three words, and preferred size. Entries are open all week — free to enter.</p>
+      </div>
+      <div class="step">
+        <div class="step-number">02</div>
+        <h3>One person is selected</h3>
+        <p>Every Sunday, one entry is chosen at random. You'll get a text — you have 3 hours to confirm and pay.</p>
+      </div>
+      <div class="step">
+        <div class="step-number">03</div>
+        <h3>I paint your piece</h3>
+        <p>Original acrylic on canvas. I interpret your three words however they move me. Full creative freedom.</p>
+      </div>
+      <div class="step">
+        <div class="step-number">04</div>
+        <h3>You get the original</h3>
+        <p>Photographed, carefully packed, and shipped to your door. This is the only copy that will ever exist.</p>
+      </div>
+      <div class="step">
+        <div class="step-number">05</div>
+        <h3>A charity benefits</h3>
+        <p>A portion of every painting goes to a rotating charity of the week. Your art helps someone else too.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- THIS WEEK -->
+  <section>
+    <div class="week-banner">
+      <div class="week-label">Week of April 13, 2026</div>
+      <div class="winner-name">Julie I.</div>
+      <div class="winner-location">Ludlow, MA</div>
+      <div class="winner-words">
+        <span>harbor</span>
+        <span>velvet</span>
+        <span>clocktower</span>
+      </div>
+      <div class="entries-status">Painting in progress &mdash; entries open for next week</div>
+    </div>
+  </section>
+
+  <!-- CHARITY BANNER -->
+  <section>
+    <div class="charity-banner">
+      <h2>Art that gives back</h2>
+      <p>Every week, a different charity. Every painting, a real donation. You're not just buying art — you're part of something.</p>
+    </div>
+  </section>
+
+  <!-- PRICING -->
+  <section id="pricing">
+    <div class="section-label">Pricing</div>
+    <h2>Simple, honest pricing</h2>
+    <p>Original art, shipped free of hidden fees. What you see is what you pay.</p>
+
+    <div class="pricing-cards">
+      <div class="price-card">
+        <div class="tier-name">Small</div>
+        <div class="size">Up to 11" &times; 14"</div>
+        <div class="price">$20</div>
+        <div class="charity-note">$5 goes to charity</div>
+        <ul class="includes">
+          <li>Original acrylic painting</li>
+          <li>Your 3 words interpreted</li>
+          <li>Shipped anywhere in the US</li>
+          <li>Featured on social media</li>
+        </ul>
+      </div>
+      <div class="price-card">
+        <div class="tier-name">Medium</div>
+        <div class="size">12" &times; 16" to 24" &times; 36"</div>
+        <div class="price">$25</div>
+        <div class="charity-note">$7 goes to charity</div>
+        <ul class="includes">
+          <li>Original acrylic painting</li>
+          <li>Your 3 words interpreted</li>
+          <li>Shipped anywhere in the US</li>
+          <li>Featured on social media</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ -->
+  <section id="faq">
+    <div class="section-label">Questions</div>
+    <h2>Good questions</h2>
+
+    <div class="faq-list">
+      <div class="faq-item">
+        <h3>Does it cost anything to enter?</h3>
+        <p>No. Entry is completely free. You only pay if you're selected. If chosen, you'll get a text with payment instructions — you have 3 hours to confirm before the next person is picked.</p>
+      </div>
+      <div class="faq-item">
+        <h3>What kind of words should I pick?</h3>
+        <p>Nouns tend to work best, but there are no hard rules. Pick three words that mean something to you, or pick three completely random ones. The painting is my interpretation — that's what makes each one unique.</p>
+      </div>
+      <div class="faq-item">
+        <h3>How is the selection made?</h3>
+        <p>One entry is chosen at random each Sunday. Everyone has the same chance. If the selected person doesn't confirm within 3 hours, the next name is drawn.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Do I get to approve the painting first?</h3>
+        <p>I'll send you a photo when it's finished, before I ship. But part of the magic is trusting the process. You give me the words, I give you art.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Is this really the original painting?</h3>
+        <p>Yes. You receive the one and only original. There are no prints, no copies. Once it's yours, it's yours.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Can I enter every week?</h3>
+        <p>Absolutely. If you're not selected one week, you're welcome to submit again the next. New entries each week — your words can be different every time.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Which charity does the donation go to?</h3>
+        <p>I rotate charities on a weekly basis and announce each one alongside the painting reveal on social media. Follow along to see where your contribution goes.</p>
+      </div>
+      <div class="faq-item">
+        <h3>Do you ship outside the US?</h3>
+        <p>Not yet — US only for now. International shipping is on the roadmap as things grow.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FINAL CTA -->
+  <section class="final-cta" id="enter">
+    <h2>Ready?</h2>
+    <p>Pick your three words and enter this week's selection. It's free — you only pay if you're chosen.</p>
+    <a href="#" class="cta-btn" onclick="alert('This will link to your Google Form once it\'s set up!'); return false;">Enter this week's selection</a>
+    <br><br>
+    <span style="font-size: 0.85rem; color: var(--muted);">US shipping only &middot; Free to enter &middot; Selected weekly on Sundays</span>
+  </section>
+
+  <footer>
+    &copy; 2026 In Three Words &middot; Original art. Three words. A good cause.
+  </footer>
+
+</body>
+</html>
