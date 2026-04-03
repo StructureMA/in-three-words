@@ -1,6 +1,7 @@
 "use client";
 
 import { useActionState } from "react";
+import Link from "next/link";
 import { submitEntry, type SubmitEntryState } from "@/actions/entries";
 
 const initialState: SubmitEntryState = { success: false, error: null };
@@ -16,18 +17,18 @@ export default function EnterPage() {
       <div className="min-h-screen flex items-center justify-center bg-[#FAFAF8] px-4">
         <div className="max-w-md text-center">
           <h1 className="font-[family-name:var(--font-playfair)] text-3xl font-bold text-[#1A1A1A] mb-4">
-            You're in!
+            You&apos;re in!
           </h1>
           <p className="text-[#6B6B6B] text-lg mb-6">
             Your entry has been submitted. If your entry is chosen this Sunday,
-            you'll get a text. Good luck!
+            you&apos;ll get a text. Good luck!
           </p>
-          <a
+          <Link
             href="/"
             className="inline-block text-[#2E6B8A] font-semibold hover:underline"
           >
             &larr; Back to home
-          </a>
+          </Link>
         </div>
       </div>
     );
@@ -40,7 +41,7 @@ export default function EnterPage() {
           Enter for next week
         </h1>
         <p className="text-[#6B6B6B] mb-1">
-          Tell me 2–4 words — they'll guide the painting.
+          Tell me 2–4 words — they&apos;ll guide the painting.
         </p>
         <p className="text-[#999] text-sm italic mb-8">
           (ex. purple, elephant, ethereal, humble)
@@ -107,7 +108,7 @@ export default function EnterPage() {
               className="w-full px-4 py-3 border border-[#E8E6E3] rounded-lg bg-white text-[#1A1A1A] placeholder-[#999] focus:outline-none focus:border-[#2E6B8A] transition-colors"
             />
             <p className="text-xs text-[#999] mt-1">
-              We'll only text you if your entry is chosen.
+              We&apos;ll only text you if your entry is chosen.
             </p>
           </div>
 
