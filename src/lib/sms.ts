@@ -1,8 +1,8 @@
-import { Client } from "plivo";
+import twilio from "twilio";
 
-const client = new Client(
-  process.env.PLIVO_AUTH_ID!,
-  process.env.PLIVO_AUTH_TOKEN!
+const client = twilio(
+  process.env.TWILIO_ACCOUNT_SID!,
+  process.env.TWILIO_AUTH_TOKEN!
 );
 
 interface SendSelectionSMSParams {
@@ -40,11 +40,11 @@ export async function sendSelectionSMS({
     .join("\n");
 
   try {
-    await client.messages.create(
-      process.env.PLIVO_FROM_NUMBER!,
-      formattedPhone,
-      message
-    );
+    await client.messages.create({
+      body: message,
+      from: process.env.TWILIO_FROM_NUMBER!,
+      to: formattedPhone,
+    });
     return { success: true, error: null };
   } catch (err) {
     console.error("SMS send error:", err);
