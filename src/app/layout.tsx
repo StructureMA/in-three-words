@@ -13,6 +13,26 @@ export const metadata: Metadata = {
   title: "In a Few Words — Original Art for a Cause",
   description:
     "Tell me 2–4 words. I'll paint you a painting. Each week, one stranger is selected. A portion goes to charity.",
+  icons: {
+    icon: "/favicon.png",
+    apple: "/apple-touch-icon.png",
+  },
+  openGraph: {
+    title: "In a Few Words — Original Art for a Cause",
+    description:
+      "Give me a few words. I'll paint you a painting. Every painting supports a charity.",
+    images: [{ url: "/og-image.png", width: 1200, height: 630 }],
+    siteName: "In a Few Words",
+    type: "website",
+    url: "https://inafewwords.art",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "In a Few Words — Original Art for a Cause",
+    description:
+      "Give me a few words. I'll paint you a painting. Every painting supports a charity.",
+    images: ["/og-image.png"],
+  },
 };
 
 export default function RootLayout({
