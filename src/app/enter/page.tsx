@@ -112,6 +112,17 @@ export default function EnterPage() {
             </p>
           </div>
 
+          {/* Comment */}
+          <div>
+            <textarea
+              name="comment"
+              placeholder="Anything else you want to share? (optional)"
+              rows={3}
+              maxLength={500}
+              className="w-full px-4 py-3 border border-[#E8E6E3] rounded-lg bg-white text-[#1A1A1A] placeholder-[#999] focus:outline-none focus:border-[#2E6B8A] transition-colors resize-none"
+            />
+          </div>
+
           {/* Size */}
           <div>
             <label className="block text-xs font-semibold uppercase tracking-wider text-[#2E6B8A] mb-3">

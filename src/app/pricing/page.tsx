@@ -75,6 +75,34 @@ export default function PricingPage() {
           ))}
         </div>
 
+        {/* Where your money goes */}
+        <div className="bg-white rounded-2xl border border-[#E8E6E3] p-6 sm:p-8 mb-12">
+          <h2 className="font-[family-name:var(--font-playfair)] text-xl font-bold text-[#1A1A1A] mb-4 text-center">
+            Where your money goes
+          </h2>
+          <p className="text-sm text-[#6B6B6B] text-center mb-6">
+            Every dollar is accounted for. No middlemen, no mystery.
+          </p>
+          <div className="grid grid-cols-2 gap-6">
+            <div>
+              <h3 className="text-sm font-semibold text-[#1A1A1A] mb-3">Small ($20)</h3>
+              <div className="space-y-2 text-sm text-[#6B6B6B]">
+                <div className="flex justify-between"><span>Charity</span><span className="font-semibold text-[#2E6B8A]">$5</span></div>
+                <div className="flex justify-between"><span>Shipping</span><span>~$10&ndash;12</span></div>
+                <div className="flex justify-between"><span>Supplies</span><span>the rest</span></div>
+              </div>
+            </div>
+            <div>
+              <h3 className="text-sm font-semibold text-[#1A1A1A] mb-3">Medium ($25)</h3>
+              <div className="space-y-2 text-sm text-[#6B6B6B]">
+                <div className="flex justify-between"><span>Charity</span><span className="font-semibold text-[#2E6B8A]">$7</span></div>
+                <div className="flex justify-between"><span>Shipping</span><span>~$15&ndash;20</span></div>
+                <div className="flex justify-between"><span>Supplies</span><span>the rest</span></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
         <div className="text-center text-sm text-[#999]">
           <p>US shipping only &middot; One entry per person per week</p>
         </div>

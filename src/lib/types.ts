@@ -20,6 +20,7 @@ export interface Entry {
   word_3: string | null;
   word_4: string | null;
   size: EntrySize;
+  comment: string | null;
   week_of: string;
   created_at: string;
 }

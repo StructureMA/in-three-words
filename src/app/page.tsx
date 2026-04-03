@@ -66,7 +66,7 @@ export default async function Home() {
       {/* ── Hero ── */}
       <section className="max-w-3xl mx-auto px-4 pt-20 pb-16 text-center">
         <h1 className="font-[family-name:var(--font-playfair)] text-4xl sm:text-5xl md:text-6xl font-bold text-[#1A1A1A] leading-tight mb-6">
-          Give me three words.
+          Give me a few words.
           <br />
           I&apos;ll paint <em className="text-[#2E6B8A]">you</em> a painting.
         </h1>
