@@ -24,3 +24,20 @@ npm-debug.log*
 
 # Superpowers brainstorming
 .superpowers/
+
+# Git worktrees
+.worktrees/
+
+# Next.js
+.next/
+out/
+
+# Vercel
+.vercel/
+
+# TypeScript
+*.tsbuildinfo
+next-env.d.ts
+
+# Local env
+.env*.local
