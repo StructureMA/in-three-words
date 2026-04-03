@@ -1,0 +1,56 @@
+import { Client } from "plivo";
+
+const client = new Client(
+  process.env.PLIVO_AUTH_ID!,
+  process.env.PLIVO_AUTH_TOKEN!
+);
+
+interface SendSelectionSMSParams {
+  to: string;
+  name: string;
+  words: string[];
+  paymentUrl: string;
+  venmoHandle: string;
+}
+
+export async function sendSelectionSMS({
+  to,
+  name,
+  words,
+  paymentUrl,
+  venmoHandle,
+}: SendSelectionSMSParams): Promise<{
+  success: boolean;
+  error: string | null;
+}> {
+  const formattedPhone = to.startsWith("+1") ? to : `+1${to}`;
+  const wordList = words.join(", ");
+
+  const message = [
+    `Hey ${name}! Your entry was chosen this week on In a Few Words.`,
+    ``,
+    `Your words: ${wordList}`,
+    ``,
+    `Confirm and pay here: ${paymentUrl}`,
+    venmoHandle ? `Or Venmo: @${venmoHandle}` : "",
+    ``,
+    `You have 3 hours to confirm. If we don't hear back, we'll draw the next entry.`,
+  ]
+    .filter(Boolean)
+    .join("\n");
+
+  try {
+    await client.messages.create(
+      process.env.PLIVO_FROM_NUMBER!,
+      formattedPhone,
+      message
+    );
+    return { success: true, error: null };
+  } catch (err) {
+    console.error("SMS send error:", err);
+    return {
+      success: false,
+      error: err instanceof Error ? err.message : "Failed to send SMS",
+    };
+  }
+}
