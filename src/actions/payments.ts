@@ -1,6 +1,7 @@
 "use server";
 
 import { createAdminClient } from "@/lib/supabase/admin";
+import { createClient } from "@/lib/supabase/server";
 import { createCheckoutSession } from "@/lib/stripe";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
@@ -74,5 +75,32 @@ export async function submitShippingAddress(
   }
 
   revalidatePath(`/pay/${paymentToken}`);
+  return { success: true, error: null };
+}
+
+export async function markVenmoPaid(
+  selectionId: string,
+  method: "venmo" | "paypal"
+): Promise<{ success: boolean; error: string | null }> {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) return { success: false, error: "Not authenticated" };
+
+  const { error } = await supabase
+    .from("selections")
+    .update({
+      status: "paid",
+      payment_method: method,
+      payment_confirmed_at: new Date().toISOString(),
+    })
+    .eq("id", selectionId);
+
+  if (error)
+    return { success: false, error: "Failed to update payment status" };
+
+  revalidatePath("/admin/payments");
   return { success: true, error: null };
 }
