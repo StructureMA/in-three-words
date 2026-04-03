@@ -46,3 +46,28 @@ export function getWords(entry: {
     (w): w is string => w !== null && w.trim() !== ""
   );
 }
+
+/**
+ * Get the next Saturday at 11:59:59.999 PM.
+ * If today is Saturday, returns tonight.
+ */
+export function getNextSaturdayMidnight(): Date {
+  const now = new Date();
+  const day = now.getDay();
+  const daysUntilSaturday = day === 6 ? 0 : (6 - day);
+  const saturday = new Date(now);
+  saturday.setDate(now.getDate() + daysUntilSaturday);
+  saturday.setHours(23, 59, 59, 999);
+  return saturday;
+}
+
+/**
+ * Check if entries are currently closed.
+ * Closed: Sunday all day (selection day).
+ */
+export function isEntriesClosed(): boolean {
+  const now = new Date();
+  const day = now.getDay();
+  // Closed on Sunday (day === 0)
+  return day === 0;
+}
