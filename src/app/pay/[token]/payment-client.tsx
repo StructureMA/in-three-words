@@ -34,6 +34,7 @@ export default function PaymentClient({
   const [addressSubmitted, setAddressSubmitted] = useState(false);
   const [addressError, setAddressError] = useState<string | null>(null);
   const [addressLoading, setAddressLoading] = useState(false);
+  const [isGift, setIsGift] = useState(false);
 
   async function handleStripePay() {
     setStripeLoading(true);
@@ -89,6 +90,7 @@ export default function PaymentClient({
             Now, where should we ship your painting?
           </p>
           <form onSubmit={handleAddressSubmit} className="space-y-4">
+            <input type="hidden" name="is_gift" value={isGift ? "true" : "false"} />
             <input
               type="text"
               name="street"
@@ -121,6 +123,49 @@ export default function PaymentClient({
                 className="col-span-1 px-4 py-3 border border-[#E8E6E3] rounded-lg bg-white text-[#1A1A1A] placeholder-[#999] focus:outline-none focus:border-[#2E6B8A] transition-colors"
               />
             </div>
+
+            {/* Gift option */}
+            {!isGift ? (
+              <button
+                type="button"
+                onClick={() => setIsGift(true)}
+                className="text-sm text-[#2E6B8A] font-medium hover:underline"
+              >
+                Want to send it to someone else?
+              </button>
+            ) : (
+              <div className="border border-[#E8E6E3] rounded-lg p-4 space-y-3 bg-white">
+                <div className="flex items-center justify-between">
+                  <span className="text-sm font-semibold text-[#1A1A1A]">
+                    Gift recipient
+                  </span>
+                  <button
+                    type="button"
+                    onClick={() => setIsGift(false)}
+                    className="text-xs text-[#999] hover:text-[#6B6B6B]"
+                  >
+                    Cancel
+                  </button>
+                </div>
+                <input
+                  type="text"
+                  name="gift_recipient_name"
+                  placeholder="Recipient&apos;s name *"
+                  required
+                  className="w-full px-4 py-3 border border-[#E8E6E3] rounded-lg bg-[#FAFAF8] text-[#1A1A1A] placeholder-[#999] focus:outline-none focus:border-[#2E6B8A] transition-colors"
+                />
+                <textarea
+                  name="gift_note"
+                  placeholder="Add a note (optional)"
+                  rows={3}
+                  className="w-full px-4 py-3 border border-[#E8E6E3] rounded-lg bg-[#FAFAF8] text-[#1A1A1A] placeholder-[#999] focus:outline-none focus:border-[#2E6B8A] transition-colors resize-none"
+                />
+                <p className="text-xs text-[#999]">
+                  Your name ({entryName}) will be included on the shipment documents. This cannot be changed.
+                </p>
+              </div>
+            )}
+
             {addressError && (
               <p className="text-red-500 text-sm">{addressError}</p>
             )}
