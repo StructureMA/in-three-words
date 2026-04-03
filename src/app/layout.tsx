@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import { Playfair_Display } from "next/font/google";
 import "./globals.css";
 
@@ -7,7 +8,7 @@ const playfair = Playfair_Display({
   display: "swap",
 });
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "In a Few Words — Original Art for a Cause",
   description:
     "Tell me 2–4 words. I'll paint you a painting. Each week, one stranger is selected. A portion goes to charity.",
