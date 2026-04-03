@@ -70,11 +70,12 @@ export default async function Home() {
           <br />
           I&apos;ll paint <em className="text-[#2E6B8A]">you</em> a painting.
         </h1>
-        <p className="text-lg sm:text-xl text-[#6B6B6B] max-w-xl mx-auto leading-relaxed">
-          Tell me 2&ndash;4 words &mdash; they&apos;ll guide the painting. Each
-          week, one stranger is selected. You get the original, shipped to your
-          door. A portion goes to charity.
-        </p>
+        <div className="text-lg sm:text-xl text-[#6B6B6B] max-w-2xl mx-auto leading-relaxed space-y-1 text-center">
+          <p>Tell me 2&ndash;4 words &mdash; they&apos;ll guide the painting.</p>
+          <p>Each week, one stranger is selected.</p>
+          <p>You get the original, shipped to your door.</p>
+          <p>A portion goes to charity.</p>
+        </div>
       </section>
 
       {/* ── Painting Now Banner ── */}
