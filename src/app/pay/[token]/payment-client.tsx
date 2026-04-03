@@ -13,7 +13,6 @@ interface PaymentClientProps {
   size: string;
   price: string;
   venmoHandle: string;
-  status: string;
   hasShippingAddress: boolean;
   paymentSuccess: boolean;
   paymentCanceled: boolean;
@@ -26,7 +25,6 @@ export default function PaymentClient({
   size,
   price,
   venmoHandle,
-  status,
   hasShippingAddress,
   paymentSuccess,
   paymentCanceled,

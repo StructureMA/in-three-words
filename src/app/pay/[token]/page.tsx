@@ -36,7 +36,7 @@ export default async function PaymentPage({
     );
   }
 
-  const entry = selection.entries as any;
+  const entry = selection.entries as Record<string, string>;
   const isExpired =
     selection.expires_at && new Date(selection.expires_at) < new Date();
   const isPaid = ["paid", "painting", "shipped", "posted"].includes(
@@ -101,7 +101,6 @@ export default async function PaymentPage({
       size={entry.size}
       price={price}
       venmoHandle={venmoSetting?.value || ""}
-      status={selection.status}
       hasShippingAddress={!!selection.shipping_street}
       paymentSuccess={success === "true"}
       paymentCanceled={canceled === "true"}

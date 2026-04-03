@@ -17,7 +17,7 @@ export async function initiateStripePayment(paymentToken: string) {
 
   if (!selection) return { error: "Invalid payment link" };
 
-  const entry = selection.entries as any;
+  const entry = selection.entries as Record<string, string>;
 
   // Verify payable state
   if (!["notified", "confirmed"].includes(selection.status)) {
