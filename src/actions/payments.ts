@@ -53,9 +53,16 @@ export async function submitShippingAddress(
   const city = formData.get("city") as string;
   const state = formData.get("state") as string;
   const zip = formData.get("zip") as string;
+  const isGift = formData.get("is_gift") === "true";
+  const giftRecipientName = formData.get("gift_recipient_name") as string;
+  const giftNote = formData.get("gift_note") as string;
 
   if (!street || !city || !state || !zip) {
     return { success: false, error: "Please fill in all address fields" };
+  }
+
+  if (isGift && !giftRecipientName) {
+    return { success: false, error: "Please enter the recipient's name" };
   }
 
   const supabase = createAdminClient();
@@ -67,6 +74,9 @@ export async function submitShippingAddress(
       shipping_city: city.trim(),
       shipping_state: state.trim().toUpperCase(),
       shipping_zip: zip.trim(),
+      is_gift: isGift,
+      gift_recipient_name: isGift ? giftRecipientName.trim() : null,
+      gift_note: isGift ? giftNote?.trim() || null : null,
     })
     .eq("payment_token", paymentToken);
 

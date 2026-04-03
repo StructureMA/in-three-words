@@ -41,6 +41,9 @@ export interface Selection {
   tracking_number: string | null;
   expected_arrival: string | null;
   shipped_at: string | null;
+  is_gift: boolean;
+  gift_recipient_name: string | null;
+  gift_note: string | null;
   created_at: string;
 }
 
