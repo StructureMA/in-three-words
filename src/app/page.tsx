@@ -66,87 +66,29 @@ export default async function Home() {
       {/* ── Spray paint mesh corners ── */}
       <div className="pointer-events-none fixed inset-0 z-0" aria-hidden="true">
         {/* Top-left corner */}
-        <div className="absolute -top-16 -left-16 w-96 h-96 sm:w-[500px] sm:h-[500px]">
-          <svg viewBox="0 0 400 400" className="w-full h-full opacity-[0.35]">
-            <defs>
-              <filter id="spray-tl">
-                <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" result="noise" />
-                <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" />
-                <feGaussianBlur stdDeviation="0.5" />
-              </filter>
-              <pattern id="mesh-tl" width="12" height="12" patternUnits="userSpaceOnUse">
-                <rect width="12" height="12" fill="none" />
-                <rect x="1" y="1" width="10" height="10" rx="1.5" fill="#2E6B8A" />
-                <rect x="3" y="3" width="6" height="6" rx="0.5" fill="none" stroke="rgba(250,250,248,0.6)" strokeWidth="1" />
-              </pattern>
-              <radialGradient id="fade-tl" cx="0" cy="0" r="0.7">
-                <stop offset="0%" stopOpacity="1" />
-                <stop offset="60%" stopOpacity="0.7" />
-                <stop offset="100%" stopOpacity="0" />
-              </radialGradient>
-              <mask id="mask-tl">
-                <rect width="400" height="400" fill="url(#fade-tl)" />
-              </mask>
-            </defs>
-            <g mask="url(#mask-tl)" filter="url(#spray-tl)">
-              <rect width="400" height="400" fill="url(#mesh-tl)" />
-            </g>
-            {/* Overspray dots */}
-            <g opacity="0.4">
-              <circle cx="180" cy="45" r="1.5" fill="#2E6B8A" />
-              <circle cx="210" cy="80" r="1" fill="#2E6B8A" />
-              <circle cx="160" cy="120" r="0.8" fill="#2E6B8A" />
-              <circle cx="240" cy="60" r="1.2" fill="#2E6B8A" />
-              <circle cx="45" cy="190" r="1" fill="#2E6B8A" />
-              <circle cx="80" cy="220" r="1.5" fill="#2E6B8A" />
-              <circle cx="120" cy="175" r="0.8" fill="#2E6B8A" />
-              <circle cx="250" cy="110" r="1" fill="#2E6B8A" />
-              <circle cx="100" cy="250" r="0.7" fill="#2E6B8A" />
-              <circle cx="270" cy="140" r="1.3" fill="#2E6B8A" />
-            </g>
-          </svg>
-        </div>
+        <div
+          className="absolute -top-10 -left-10 w-[400px] h-[400px] sm:w-[500px] sm:h-[500px]"
+          style={{
+            background: `
+              radial-gradient(circle at 0% 0%, rgba(46,107,138,0.3) 0%, rgba(46,107,138,0.15) 40%, transparent 70%),
+              repeating-conic-gradient(rgba(46,107,138,0.4) 0% 25%, transparent 0% 50%) 0 0 / 10px 10px
+            `,
+            maskImage: "radial-gradient(circle at 0% 0%, black 0%, transparent 65%)",
+            WebkitMaskImage: "radial-gradient(circle at 0% 0%, black 0%, transparent 65%)",
+          }}
+        />
         {/* Bottom-right corner */}
-        <div className="absolute -bottom-16 -right-16 w-96 h-96 sm:w-[500px] sm:h-[500px]">
-          <svg viewBox="0 0 400 400" className="w-full h-full opacity-[0.35]">
-            <defs>
-              <filter id="spray-br">
-                <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" result="noise" />
-                <feDisplacementMap in="SourceGraphic" in2="noise" scale="3" />
-                <feGaussianBlur stdDeviation="0.5" />
-              </filter>
-              <pattern id="mesh-br" width="12" height="12" patternUnits="userSpaceOnUse">
-                <rect width="12" height="12" fill="none" />
-                <rect x="1" y="1" width="10" height="10" rx="1.5" fill="#2E6B8A" />
-                <rect x="3" y="3" width="6" height="6" rx="0.5" fill="none" stroke="rgba(250,250,248,0.6)" strokeWidth="1" />
-              </pattern>
-              <radialGradient id="fade-br" cx="1" cy="1" r="0.7">
-                <stop offset="0%" stopOpacity="1" />
-                <stop offset="60%" stopOpacity="0.7" />
-                <stop offset="100%" stopOpacity="0" />
-              </radialGradient>
-              <mask id="mask-br">
-                <rect width="400" height="400" fill="url(#fade-br)" />
-              </mask>
-            </defs>
-            <g mask="url(#mask-br)" filter="url(#spray-br)">
-              <rect width="400" height="400" fill="url(#mesh-br)" />
-            </g>
-            {/* Overspray dots */}
-            <g opacity="0.4">
-              <circle cx="220" cy="355" r="1.5" fill="#2E6B8A" />
-              <circle cx="190" cy="320" r="1" fill="#2E6B8A" />
-              <circle cx="240" cy="280" r="0.8" fill="#2E6B8A" />
-              <circle cx="160" cy="340" r="1.2" fill="#2E6B8A" />
-              <circle cx="355" cy="210" r="1" fill="#2E6B8A" />
-              <circle cx="320" cy="180" r="1.5" fill="#2E6B8A" />
-              <circle cx="280" cy="225" r="0.8" fill="#2E6B8A" />
-              <circle cx="150" cy="290" r="1" fill="#2E6B8A" />
-              <circle cx="300" cy="150" r="0.7" fill="#2E6B8A" />
-              <circle cx="130" cy="260" r="1.3" fill="#2E6B8A" />
-            </g>
-          </svg>
-        </div>
+        <div
+          className="absolute -bottom-10 -right-10 w-[400px] h-[400px] sm:w-[500px] sm:h-[500px]"
+          style={{
+            background: `
+              radial-gradient(circle at 100% 100%, rgba(46,107,138,0.3) 0%, rgba(46,107,138,0.15) 40%, transparent 70%),
+              repeating-conic-gradient(rgba(46,107,138,0.4) 0% 25%, transparent 0% 50%) 0 0 / 10px 10px
+            `,
+            maskImage: "radial-gradient(circle at 100% 100%, black 0%, transparent 65%)",
+            WebkitMaskImage: "radial-gradient(circle at 100% 100%, black 0%, transparent 65%)",
+          }}
+        />
       </div>
 
       {/* ── Hero ── */}
