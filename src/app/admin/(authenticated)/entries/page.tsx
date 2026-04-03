@@ -72,6 +72,8 @@ export default async function AdminEntriesPage() {
             selectionId={activeSelection.id}
             status={activeSelection.status}
             expiresAt={activeSelection.expires_at}
+            shippingProvider={activeSelection.shipping_provider}
+            trackingNumber={activeSelection.tracking_number}
           />
         </div>
       )}
