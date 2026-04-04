@@ -30,7 +30,7 @@ export default function AdminNav() {
   return (
     <nav className="flex items-center bg-[#1A1A1A] text-white">
       <div className="px-5 py-3.5 font-[family-name:var(--font-playfair)] text-sm font-semibold text-[#2E6B8A] border-r border-[#333]">
-        ITW Admin
+        IAFW Admin
       </div>
       <div className="flex items-center flex-1">
         {navItems.map((item) => {

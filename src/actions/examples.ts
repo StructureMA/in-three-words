@@ -1,16 +1,18 @@
 "use server";
 
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { uploadFile } from "@/lib/storage";
 import { revalidatePath } from "next/cache";
 
 export async function uploadExample(
   formData: FormData
 ): Promise<{ success: boolean; error: string | null }> {
-  const supabase = await createClient();
-
-  const { data: { user } } = await supabase.auth.getUser();
+  const authClient = await createClient();
+  const { data: { user } } = await authClient.auth.getUser();
   if (!user) return { success: false, error: "Not authenticated" };
+
+  const supabase = createAdminClient();
 
   const file = formData.get("photo") as File;
   const note = formData.get("note") as string;
@@ -53,11 +55,11 @@ export async function updateExampleNote(
   id: string,
   note: string
 ): Promise<{ success: boolean; error: string | null }> {
-  const supabase = await createClient();
-
-  const { data: { user } } = await supabase.auth.getUser();
+  const authClient = await createClient();
+  const { data: { user } } = await authClient.auth.getUser();
   if (!user) return { success: false, error: "Not authenticated" };
 
+  const supabase = createAdminClient();
   const { error } = await supabase
     .from("example_paintings")
     .update({ note: note.trim() || null })
@@ -73,11 +75,11 @@ export async function updateExampleNote(
 export async function deleteExample(
   id: string
 ): Promise<{ success: boolean; error: string | null }> {
-  const supabase = await createClient();
-
-  const { data: { user } } = await supabase.auth.getUser();
+  const authClient = await createClient();
+  const { data: { user } } = await authClient.auth.getUser();
   if (!user) return { success: false, error: "Not authenticated" };
 
+  const supabase = createAdminClient();
   const { error } = await supabase
     .from("example_paintings")
     .delete()
