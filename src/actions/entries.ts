@@ -56,5 +56,17 @@ export async function submitEntry(
     return { success: false, error: "Something went wrong. Please try again." };
   }
 
+  // Notify admin via email (don't block the response if it fails)
+  const words = [word1, word2, word3, word4].filter(
+    (w): w is string => w !== null && w.trim() !== ""
+  );
+  const finalCharityPref = charityPreference === "other" ? charityOther?.trim() || "other" : charityPreference;
+
+  import("@/lib/email")
+    .then(({ notifyNewEntry }) =>
+      notifyNewEntry({ name: name.trim(), words, size, charityPreference: finalCharityPref })
+    )
+    .catch((err) => console.error("Email notification failed:", err));
+
   return { success: true, error: null };
 }
