@@ -1,17 +1,4 @@
 import twilio from "twilio";
-import type { Twilio } from "twilio";
-
-let _client: Twilio | null = null;
-
-function getClient(): Twilio {
-  if (!_client) {
-    _client = twilio(
-      process.env.TWILIO_ACCOUNT_SID!,
-      process.env.TWILIO_AUTH_TOKEN!
-    );
-  }
-  return _client;
-}
 
 interface SendSelectionSMSParams {
   to: string;
@@ -48,7 +35,11 @@ export async function sendSelectionSMS({
     .join("\n");
 
   try {
-    await getClient().messages.create({
+    const client = twilio(
+      process.env.TWILIO_ACCOUNT_SID!,
+      process.env.TWILIO_AUTH_TOKEN!
+    );
+    await client.messages.create({
       body: message,
       from: process.env.TWILIO_FROM_NUMBER!,
       to: formattedPhone,
