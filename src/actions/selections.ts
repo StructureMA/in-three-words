@@ -173,7 +173,10 @@ export async function deleteSelection(
   const { data: { user } } = await supabase.auth.getUser();
   if (!user) return { success: false, error: "Not authenticated" };
 
-  const { error } = await supabase
+  const { createAdminClient } = await import("@/lib/supabase/admin");
+  const admin = createAdminClient();
+
+  const { error } = await admin
     .from("selections")
     .delete()
     .eq("id", selectionId);
