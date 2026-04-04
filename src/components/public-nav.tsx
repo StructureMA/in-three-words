@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useState } from "react";
 
 export default function PublicNav() {
@@ -12,8 +13,15 @@ export default function PublicNav() {
         {/* Logo */}
         <Link
           href="/"
-          className="font-[family-name:var(--font-playfair)] text-lg font-bold text-[#2E6B8A] hover:text-[#245a74] transition-colors"
+          className="flex items-center gap-2 font-[family-name:var(--font-playfair)] text-lg font-bold text-[#2E6B8A] hover:text-[#245a74] transition-colors"
         >
+          <Image
+            src="/favicon.png"
+            alt="IAFW logo"
+            width={28}
+            height={28}
+            className="rounded-sm"
+          />
           In a Few Words
         </Link>
 
