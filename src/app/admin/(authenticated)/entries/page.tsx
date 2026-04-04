@@ -3,6 +3,7 @@ import { getCurrentWeekMonday, getWords, formatPhone } from "@/lib/utils";
 import type { Entry, SelectionWithEntry } from "@/lib/types";
 import DrawEntryButton from "./draw-entry-button";
 import SelectionActions from "./selection-actions";
+import EntryActions from "./entry-actions";
 
 export default async function AdminEntriesPage() {
   const supabase = await createClient();
@@ -93,6 +94,7 @@ export default async function AdminEntriesPage() {
                 <th className="px-4 py-3">Size</th>
                 <th className="px-4 py-3">Phone</th>
                 <th className="px-4 py-3">Submitted</th>
+                <th className="px-4 py-3"></th>
               </tr>
             </thead>
             <tbody>
@@ -124,6 +126,9 @@ export default async function AdminEntriesPage() {
                   </td>
                   <td className="px-4 py-3 text-[#999] text-xs">
                     {new Date(entry.created_at).toLocaleDateString()}
+                  </td>
+                  <td className="px-4 py-3">
+                    <EntryActions entryId={entry.id} currentNote={(entry as unknown as Record<string, string | null>).admin_note ?? null} />
                   </td>
                 </tr>
               ))}
