@@ -220,12 +220,24 @@ export default async function Home() {
             Every painting supports a cause
           </h2>
           {currentCharity ? (
-            <p className="text-[#E8F1F5] text-lg">
-              This week&apos;s charity:{" "}
-              <span className="font-semibold text-white">
-                {currentCharity.name}
-              </span>
-            </p>
+            <>
+              <p className="text-[#E8F1F5] text-lg mb-3">
+                This week&apos;s charity:{" "}
+                <span className="font-semibold text-white">
+                  {currentCharity.name}
+                </span>
+              </p>
+              {currentCharity.url && (
+                <a
+                  href={currentCharity.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-block text-sm text-[#E8F1F5]/80 hover:text-white underline underline-offset-2 transition-colors"
+                >
+                  Want to donate directly? Visit {currentCharity.name} &rarr;
+                </a>
+              )}
+            </>
           ) : (
             <p className="text-[#E8F1F5] text-lg">
               A new charity is chosen each week.
