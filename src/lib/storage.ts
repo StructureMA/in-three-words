@@ -7,9 +7,16 @@ export async function uploadFile(
 ): Promise<{ url: string | null; error: string | null }> {
   const supabase = createAdminClient();
 
+  // Convert File to ArrayBuffer for server-side upload
+  const arrayBuffer = await file.arrayBuffer();
+  const buffer = Buffer.from(arrayBuffer);
+
   const { error } = await supabase.storage
     .from(bucket)
-    .upload(path, file, { upsert: true });
+    .upload(path, buffer, {
+      upsert: true,
+      contentType: file.type,
+    });
 
   if (error) {
     console.error("Upload error:", error);

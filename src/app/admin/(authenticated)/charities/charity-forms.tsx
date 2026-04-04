@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useRef } from "react";
-import { setWeeklyCharity, markDonated } from "@/actions/charities";
+import { setWeeklyCharity, markDonated, deleteCharity } from "@/actions/charities";
 import { useRouter } from "next/navigation";
 import type { Charity } from "@/lib/types";
 
@@ -28,8 +28,26 @@ function SetCharityForm({
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState(false);
+  const [confirmDelete, setConfirmDelete] = useState(false);
   const formRef = useRef<HTMLFormElement>(null);
   const router = useRouter();
+
+  async function handleDelete() {
+    if (!currentCharity) return;
+    if (!confirmDelete) {
+      setConfirmDelete(true);
+      return;
+    }
+    setLoading(true);
+    const result = await deleteCharity(currentCharity.id);
+    setLoading(false);
+    if (result.success) {
+      router.refresh();
+    } else {
+      setError(result.error);
+      setConfirmDelete(false);
+    }
+  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -90,13 +108,44 @@ function SetCharityForm({
           <p className="text-green-600 text-xs">Charity saved!</p>
         )}
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="px-5 py-2.5 bg-[#2E6B8A] text-white rounded-lg font-semibold text-sm hover:bg-[#245a74] transition-colors disabled:opacity-50"
-        >
-          {loading ? "Saving..." : "Save"}
-        </button>
+        <div className="flex items-center gap-3">
+          <button
+            type="submit"
+            disabled={loading}
+            className="px-5 py-2.5 bg-[#2E6B8A] text-white rounded-lg font-semibold text-sm hover:bg-[#245a74] transition-colors disabled:opacity-50"
+          >
+            {loading ? "Saving..." : "Save"}
+          </button>
+          {currentCharity && (
+            !confirmDelete ? (
+              <button
+                type="button"
+                onClick={handleDelete}
+                className="text-xs text-red-400 hover:text-red-600 transition-colors"
+              >
+                Delete charity
+              </button>
+            ) : (
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleDelete}
+                  disabled={loading}
+                  className="text-xs text-red-600 font-semibold disabled:opacity-50"
+                >
+                  {loading ? "..." : "Confirm delete"}
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setConfirmDelete(false)}
+                  className="text-xs text-[#999]"
+                >
+                  Cancel
+                </button>
+              </div>
+            )
+          )}
+        </div>
       </form>
     </div>
   );

@@ -119,3 +119,24 @@ export async function markDonated(
   revalidatePath("/admin/charities");
   return { success: true, error: null };
 }
+
+export async function deleteCharity(
+  charityId: string
+): Promise<{ success: boolean; error: string | null }> {
+  const supabase = await createClient();
+
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { success: false, error: "Not authenticated" };
+
+  const admin = createAdminClient();
+  const { error } = await admin
+    .from("charities")
+    .delete()
+    .eq("id", charityId);
+
+  if (error) return { success: false, error: "Failed to delete charity" };
+
+  revalidatePath("/admin/charities");
+  revalidatePath("/");
+  return { success: true, error: null };
+}
