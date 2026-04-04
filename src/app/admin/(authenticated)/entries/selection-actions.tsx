@@ -36,15 +36,15 @@ export default function SelectionActions({
   const [showShippingForm, setShowShippingForm] = useState(false);
   const router = useRouter();
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://inafewwords.art";
-  const paymentUrl = `${siteUrl}/pay/${paymentToken}`;
+  const paymentUrl = `https://inafewwords.art/pay/${paymentToken}`;
   const wordList = entryWords?.join(", ") || "";
 
   const draftMessage = `Hey ${entryName}! Your entry was chosen this week on In a Few Words.
 
 Your words: ${wordList}
 
-Confirm and pay here: ${paymentUrl}
+Confirm and pay here:
+${paymentUrl}
 
 You have 3 hours to confirm. If we don't hear back, we'll draw the next entry.`;
 
