@@ -126,7 +126,7 @@ export async function drawEntry(): Promise<DrawEntryState> {
   };
 }
 
-export async function approveAndNotify(
+export async function markNotified(
   selectionId: string
 ): Promise<{ success: boolean; error: string | null }> {
   const supabase = await createClient();
@@ -136,10 +136,9 @@ export async function approveAndNotify(
   } = await supabase.auth.getUser();
   if (!user) return { success: false, error: "Not authenticated" };
 
-  // Get the selection with entry data
   const { data: selection } = await supabase
     .from("selections")
-    .select("*, entries!inner(*)")
+    .select("id, status")
     .eq("id", selectionId)
     .single();
 
@@ -148,40 +147,10 @@ export async function approveAndNotify(
     return { success: false, error: "Selection already notified" };
   }
 
-  // Get venmo handle from settings
-  const { data: venmoSetting } = await supabase
-    .from("site_settings")
-    .select("value")
-    .eq("key", "venmo_handle")
-    .single();
-
-  const entry = selection.entries as Entry;
-  const words = [entry.word_1, entry.word_2, entry.word_3, entry.word_4].filter(
-    (w: string | null): w is string => w !== null && w.trim() !== ""
-  );
-
-  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-  const paymentUrl = `${baseUrl}/pay/${selection.payment_token}`;
-
-  // Send SMS via Plivo
-  const { sendSelectionSMS } = await import("@/lib/sms");
-  const smsResult = await sendSelectionSMS({
-    to: entry.phone,
-    name: entry.name,
-    words,
-    paymentUrl,
-    venmoHandle: venmoSetting?.value || "",
-  });
-
-  if (!smsResult.success) {
-    return { success: false, error: `SMS failed: ${smsResult.error}` };
-  }
-
-  // Update selection status with 3-hour expiry
   const now = new Date();
   const expiresAt = new Date(now.getTime() + 3 * 60 * 60 * 1000);
 
-  await supabase
+  const { error } = await supabase
     .from("selections")
     .update({
       status: "notified",
@@ -189,6 +158,8 @@ export async function approveAndNotify(
       expires_at: expiresAt.toISOString(),
     })
     .eq("id", selectionId);
+
+  if (error) return { success: false, error: "Failed to update status" };
 
   revalidatePath("/admin/entries");
   return { success: true, error: null };

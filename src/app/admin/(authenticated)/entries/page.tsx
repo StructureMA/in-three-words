@@ -74,6 +74,10 @@ export default async function AdminEntriesPage() {
             expiresAt={activeSelection.expires_at}
             shippingProvider={activeSelection.shipping_provider}
             trackingNumber={activeSelection.tracking_number}
+            entryName={activeSelection.entries.name}
+            entryPhone={activeSelection.entries.phone}
+            entryWords={getWords(activeSelection.entries)}
+            paymentToken={activeSelection.payment_token}
           />
         </div>
       )}

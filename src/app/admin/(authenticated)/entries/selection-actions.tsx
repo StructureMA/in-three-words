@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { approveAndNotify } from "@/actions/selections";
+import { markNotified } from "@/actions/selections";
 import { markShipped } from "@/actions/shipping";
 import { useRouter } from "next/navigation";
 import CountdownTimer from "@/components/countdown-timer";
@@ -12,6 +12,10 @@ interface SelectionActionsProps {
   expiresAt: string | null;
   shippingProvider?: string | null;
   trackingNumber?: string | null;
+  entryName?: string;
+  entryPhone?: string;
+  entryWords?: string[];
+  paymentToken?: string;
 }
 
 export default function SelectionActions({
@@ -20,16 +24,40 @@ export default function SelectionActions({
   expiresAt,
   shippingProvider,
   trackingNumber,
+  entryName,
+  entryPhone,
+  entryWords,
+  paymentToken,
 }: SelectionActionsProps) {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [showMessage, setShowMessage] = useState(false);
+  const [copied, setCopied] = useState(false);
   const [showShippingForm, setShowShippingForm] = useState(false);
   const router = useRouter();
 
-  async function handleApprove() {
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "https://inafewwords.art";
+  const paymentUrl = `${siteUrl}/pay/${paymentToken}`;
+  const wordList = entryWords?.join(", ") || "";
+
+  const draftMessage = `Hey ${entryName}! Your entry was chosen this week on In a Few Words.
+
+Your words: ${wordList}
+
+Confirm and pay here: ${paymentUrl}
+
+You have 3 hours to confirm. If we don't hear back, we'll draw the next entry.`;
+
+  async function handleCopy() {
+    await navigator.clipboard.writeText(draftMessage);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 3000);
+  }
+
+  async function handleMarkNotified() {
     setLoading(true);
     setError(null);
-    const result = await approveAndNotify(selectionId);
+    const result = await markNotified(selectionId);
     setLoading(false);
     if (result.success) {
       router.refresh();
@@ -58,13 +86,43 @@ export default function SelectionActions({
     return (
       <div className="mt-4">
         {error && <p className="text-red-500 text-xs mb-2">{error}</p>}
-        <button
-          onClick={handleApprove}
-          disabled={loading}
-          className="px-5 py-2.5 bg-[#2E6B8A] text-white rounded-lg font-semibold text-sm hover:bg-[#245a74] transition-colors disabled:opacity-50"
-        >
-          {loading ? "Sending SMS..." : "Approve & Send SMS"}
-        </button>
+
+        {!showMessage ? (
+          <button
+            onClick={() => setShowMessage(true)}
+            className="px-5 py-2.5 bg-[#2E6B8A] text-white rounded-lg font-semibold text-sm hover:bg-[#245a74] transition-colors"
+          >
+            Draft notification message
+          </button>
+        ) : (
+          <div className="space-y-3 max-w-md">
+            <p className="text-xs font-semibold text-[#6B6B6B]">
+              Copy this message and text it to {entryName} at{" "}
+              <span className="text-[#1A1A1A]">{entryPhone}</span>:
+            </p>
+            <div className="bg-[#F5F5F3] border border-[#E8E6E3] rounded-lg p-4 text-sm text-[#1A1A1A] whitespace-pre-wrap leading-relaxed">
+              {draftMessage}
+            </div>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={handleCopy}
+                className="px-4 py-2 bg-[#2E6B8A] text-white rounded-lg font-semibold text-xs hover:bg-[#245a74] transition-colors"
+              >
+                {copied ? "Copied!" : "Copy message"}
+              </button>
+              <button
+                onClick={handleMarkNotified}
+                disabled={loading}
+                className="px-4 py-2 bg-[#D4A574] text-white rounded-lg font-semibold text-xs hover:bg-[#c4955e] transition-colors disabled:opacity-50"
+              >
+                {loading ? "Saving..." : "I sent it — start the 3hr timer"}
+              </button>
+            </div>
+            <p className="text-xs text-[#999]">
+              After you text them, click the button above to start the 3-hour confirmation window.
+            </p>
+          </div>
+        )}
       </div>
     );
   }
@@ -138,7 +196,6 @@ export default function SelectionActions({
                 <option value="Other">Other</option>
               </select>
             </div>
-
             <div>
               <label className="block text-xs font-semibold text-[#6B6B6B] mb-1">
                 Tracking number
@@ -150,7 +207,6 @@ export default function SelectionActions({
                 className="w-full px-3 py-2 border border-[#E8E6E3] rounded-lg bg-white text-sm text-[#1A1A1A] placeholder-[#ccc] focus:outline-none focus:border-[#2E6B8A] transition-colors"
               />
             </div>
-
             <div>
               <label className="block text-xs font-semibold text-[#6B6B6B] mb-1">
                 Expected arrival
@@ -161,7 +217,6 @@ export default function SelectionActions({
                 className="w-full px-3 py-2 border border-[#E8E6E3] rounded-lg bg-white text-sm text-[#1A1A1A] focus:outline-none focus:border-[#2E6B8A] transition-colors"
               />
             </div>
-
             <div className="flex items-center gap-2">
               <button
                 type="submit"
