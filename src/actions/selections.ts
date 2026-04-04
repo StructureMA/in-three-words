@@ -164,3 +164,22 @@ export async function markNotified(
   revalidatePath("/admin/entries");
   return { success: true, error: null };
 }
+
+export async function deleteSelection(
+  selectionId: string
+): Promise<{ success: boolean; error: string | null }> {
+  const supabase = await createClient();
+
+  const { data: { user } } = await supabase.auth.getUser();
+  if (!user) return { success: false, error: "Not authenticated" };
+
+  const { error } = await supabase
+    .from("selections")
+    .delete()
+    .eq("id", selectionId);
+
+  if (error) return { success: false, error: "Failed to delete selection" };
+
+  revalidatePath("/admin/entries");
+  return { success: true, error: null };
+}

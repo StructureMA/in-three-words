@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { markNotified } from "@/actions/selections";
+import { markNotified, deleteSelection } from "@/actions/selections";
 import { markShipped } from "@/actions/shipping";
 import { useRouter } from "next/navigation";
 import CountdownTimer from "@/components/countdown-timer";
@@ -34,6 +34,7 @@ export default function SelectionActions({
   const [showMessage, setShowMessage] = useState(false);
   const [copied, setCopied] = useState(false);
   const [showShippingForm, setShowShippingForm] = useState(false);
+  const [confirmDeleteSelection, setConfirmDeleteSelection] = useState(false);
   const router = useRouter();
 
   const paymentUrl = `https://inafewwords.art/pay/${paymentToken}`;
@@ -82,18 +83,60 @@ You have 3 hours to confirm. If we don't hear back, we'll draw the next entry.`;
     }
   }
 
+  async function handleDeleteSelection() {
+    if (!confirmDeleteSelection) {
+      setConfirmDeleteSelection(true);
+      return;
+    }
+    setLoading(true);
+    const result = await deleteSelection(selectionId);
+    setLoading(false);
+    if (result.success) {
+      router.refresh();
+    } else {
+      setError(result.error);
+      setConfirmDeleteSelection(false);
+    }
+  }
+
   if (status === "drawn") {
     return (
       <div className="mt-4">
         {error && <p className="text-red-500 text-xs mb-2">{error}</p>}
 
         {!showMessage ? (
-          <button
-            onClick={() => setShowMessage(true)}
-            className="px-5 py-2.5 bg-[#2E6B8A] text-white rounded-lg font-semibold text-sm hover:bg-[#245a74] transition-colors"
-          >
-            Draft notification message
-          </button>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => setShowMessage(true)}
+              className="px-5 py-2.5 bg-[#2E6B8A] text-white rounded-lg font-semibold text-sm hover:bg-[#245a74] transition-colors"
+            >
+              Draft notification message
+            </button>
+            {!confirmDeleteSelection ? (
+              <button
+                onClick={handleDeleteSelection}
+                className="text-xs text-red-400 hover:text-red-600 transition-colors"
+              >
+                Remove selection
+              </button>
+            ) : (
+              <div className="flex items-center gap-2">
+                <button
+                  onClick={handleDeleteSelection}
+                  disabled={loading}
+                  className="text-xs text-red-600 font-semibold disabled:opacity-50"
+                >
+                  {loading ? "..." : "Confirm remove"}
+                </button>
+                <button
+                  onClick={() => setConfirmDeleteSelection(false)}
+                  className="text-xs text-[#999]"
+                >
+                  Cancel
+                </button>
+              </div>
+            )}
+          </div>
         ) : (
           <div className="space-y-3 max-w-md">
             <p className="text-xs font-semibold text-[#6B6B6B]">
