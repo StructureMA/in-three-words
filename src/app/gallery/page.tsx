@@ -2,6 +2,7 @@ import { createAdminClient } from "@/lib/supabase/admin";
 import { getWords } from "@/lib/utils";
 import type { Entry, Painting, Selection, Charity } from "@/lib/types";
 import Link from "next/link";
+import ExamplePaintings from "./example-paintings";
 
 interface PaintingWithDetails extends Painting {
   selections: Selection & {
@@ -57,6 +58,18 @@ export default async function GalleryPage() {
             ones that have found their homes.
           </p>
         </div>
+
+        {/* ── Example Paintings Showcase ── */}
+        <ExamplePaintings />
+
+        {/* ── Community Paintings ── */}
+        {paintings && paintings.length > 0 && (
+          <div className="text-center mb-8 mt-16">
+            <h2 className="font-[family-name:var(--font-playfair)] text-2xl font-bold text-[#1A1A1A]">
+              Community paintings
+            </h2>
+          </div>
+        )}
 
         {paintings && paintings.length > 0 ? (
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
