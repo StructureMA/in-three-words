@@ -107,7 +107,10 @@ You have 3 hours to confirm. If we don't hear back, we'll draw the next entry.`;
         {!showMessage ? (
           <div className="flex items-center gap-3">
             <button
-              onClick={() => setShowMessage(true)}
+              onClick={() => {
+                setShowMessage(true);
+                window.open(`${paymentUrl}?preview=1`, "_blank");
+              }}
               className="px-5 py-2.5 bg-[#2E6B8A] text-white rounded-lg font-semibold text-sm hover:bg-[#245a74] transition-colors"
             >
               Draft notification message

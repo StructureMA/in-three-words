@@ -16,6 +16,7 @@ interface PaymentClientProps {
   hasShippingAddress: boolean;
   paymentSuccess: boolean;
   paymentCanceled: boolean;
+  preview?: boolean;
 }
 
 export default function PaymentClient({
@@ -28,6 +29,7 @@ export default function PaymentClient({
   hasShippingAddress,
   paymentSuccess,
   paymentCanceled,
+  preview = false,
 }: PaymentClientProps) {
   const [stripeLoading, setStripeLoading] = useState(false);
   const [stripeError, setStripeError] = useState<string | null>(null);
@@ -37,18 +39,30 @@ export default function PaymentClient({
   const [isGift, setIsGift] = useState(false);
 
   async function handleStripePay() {
+    if (preview) return;
     setStripeLoading(true);
     setStripeError(null);
-    const result = await initiateStripePayment(token);
-    // If we get here, the redirect failed (it should redirect to Stripe)
-    if (result?.error) {
-      setStripeError(result.error);
+    try {
+      const result = await initiateStripePayment(token);
+      // On success the server action redirects and we never reach here.
+      // A returned error means the action rejected cleanly (e.g. bad status).
+      if (result?.error) {
+        setStripeError(result.error);
+        setStripeLoading(false);
+      }
+    } catch {
+      // Server action threw (Stripe API error, network issue, etc). Without
+      // this catch the button stays stuck in "Redirecting to checkout..."
+      setStripeError(
+        "Something went wrong starting checkout. Please try again or use Venmo."
+      );
       setStripeLoading(false);
     }
   }
 
   async function handleAddressSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (preview) return;
     setAddressLoading(true);
     setAddressError(null);
     const formData = new FormData(e.currentTarget);
@@ -60,6 +74,13 @@ export default function PaymentClient({
       setAddressError(result.error);
     }
   }
+
+  const previewBanner = preview ? (
+    <div className="bg-[#D4A574]/10 border border-[#D4A574]/40 text-[#8B6B3E] text-sm px-4 py-3 rounded-lg mb-6 text-center">
+      <strong>Preview mode</strong> — this is what {entryName} will see. Buttons
+      are disabled.
+    </div>
+  ) : null;
 
   // If address was just submitted, show confirmation
   if (addressSubmitted) {
@@ -83,6 +104,7 @@ export default function PaymentClient({
     return (
       <div className="min-h-screen flex items-center justify-center bg-[#FAFAF8] px-4">
         <div className="w-full max-w-md">
+          {previewBanner}
           <h1 className="font-[family-name:var(--font-playfair)] text-2xl font-bold text-[#1A1A1A] mb-2">
             Payment received!
           </h1>
@@ -171,7 +193,7 @@ export default function PaymentClient({
             )}
             <button
               type="submit"
-              disabled={addressLoading}
+              disabled={addressLoading || preview}
               className="w-full py-3 bg-[#2E6B8A] text-white rounded-lg font-semibold hover:bg-[#245a74] transition-colors disabled:opacity-50"
             >
               {addressLoading ? "Saving..." : "Confirm shipping address"}
@@ -187,6 +209,7 @@ export default function PaymentClient({
   return (
     <div className="min-h-screen flex items-center justify-center bg-[#FAFAF8] px-4">
       <div className="w-full max-w-md">
+        {previewBanner}
         <div className="text-center mb-8">
           <h1 className="font-[family-name:var(--font-playfair)] text-2xl font-bold text-[#1A1A1A] mb-2">
             Hey {entryName}!
@@ -225,7 +248,7 @@ export default function PaymentClient({
 
         <button
           onClick={handleStripePay}
-          disabled={stripeLoading}
+          disabled={stripeLoading || preview}
           className="w-full py-4 bg-[#2E6B8A] text-white rounded-lg font-semibold text-base hover:bg-[#245a74] transition-colors disabled:opacity-50 mb-4"
         >
           {stripeLoading

@@ -1,10 +1,13 @@
 "use server";
 
+import { notifyPaymentReceived } from "@/lib/email";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import { createCheckoutSession } from "@/lib/stripe";
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
+
+const PAID_STATUSES = ["paid", "painting", "shipped", "posted"];
 
 export async function initiateStripePayment(paymentToken: string) {
   const supabase = createAdminClient();
@@ -99,6 +102,16 @@ export async function markVenmoPaid(
   } = await supabase.auth.getUser();
   if (!user) return { success: false, error: "Not authenticated" };
 
+  const { data: existing } = await supabase
+    .from("selections")
+    .select("*, entries!inner(*)")
+    .eq("id", selectionId)
+    .single();
+
+  if (!existing) return { success: false, error: "Selection not found" };
+
+  const alreadyPaid = PAID_STATUSES.includes(existing.status);
+
   const { error } = await supabase
     .from("selections")
     .update({
@@ -110,6 +123,31 @@ export async function markVenmoPaid(
 
   if (error)
     return { success: false, error: "Failed to update payment status" };
+
+  if (!alreadyPaid) {
+    const entry = existing.entries as Record<string, string>;
+    const words = [
+      entry.word_1,
+      entry.word_2,
+      entry.word_3,
+      entry.word_4,
+    ].filter(
+      (w: string | null): w is string => w !== null && w.trim() !== ""
+    );
+    const amountCents = entry.size === "small" ? 2000 : 2500;
+
+    try {
+      await notifyPaymentReceived({
+        name: entry.name,
+        words,
+        size: entry.size,
+        amountCents,
+        method,
+      });
+    } catch (err) {
+      console.error("Failed to send payment notification:", err);
+    }
+  }
 
   revalidatePath("/admin/payments");
   return { success: true, error: null };
