@@ -99,6 +99,35 @@ You have 3 hours to confirm. If we don't hear back, we'll draw the next entry.`;
     }
   }
 
+  const cancelSelectionControls = (
+    <div className="flex flex-col gap-1">
+      {!confirmDeleteSelection ? (
+        <button
+          onClick={handleDeleteSelection}
+          className="text-xs text-red-400 hover:text-red-600 transition-colors self-start"
+        >
+          Cancel selection
+        </button>
+      ) : (
+        <div className="flex items-center gap-2">
+          <button
+            onClick={handleDeleteSelection}
+            disabled={loading}
+            className="text-xs text-red-600 font-semibold disabled:opacity-50"
+          >
+            {loading ? "..." : "Confirm cancel"}
+          </button>
+          <button
+            onClick={() => setConfirmDeleteSelection(false)}
+            className="text-xs text-[#999]"
+          >
+            Keep
+          </button>
+        </div>
+      )}
+    </div>
+  );
+
   if (status === "drawn") {
     return (
       <div className="mt-4">
@@ -175,24 +204,30 @@ You have 3 hours to confirm. If we don't hear back, we'll draw the next entry.`;
 
   if (status === "notified" && expiresAt) {
     return (
-      <div className="mt-4 flex items-center gap-3">
-        <span className="text-xs text-[#6B6B6B]">
-          Waiting for response —
-        </span>
-        <CountdownTimer
-          expiresAt={expiresAt}
-          onExpired={() => router.refresh()}
-        />
+      <div className="mt-4 space-y-3">
+        <div className="flex items-center gap-3">
+          <span className="text-xs text-[#6B6B6B]">
+            Waiting for response —
+          </span>
+          <CountdownTimer
+            expiresAt={expiresAt}
+            onExpired={() => router.refresh()}
+          />
+        </div>
+        {error && <p className="text-red-500 text-xs">{error}</p>}
+        {cancelSelectionControls}
       </div>
     );
   }
 
   if (status === "confirmed") {
     return (
-      <div className="mt-4">
-        <span className="text-xs font-semibold text-[#D4A574] bg-[#D4A574]/10 px-3 py-1 rounded-full">
+      <div className="mt-4 space-y-3">
+        <span className="text-xs font-semibold text-[#D4A574] bg-[#D4A574]/10 px-3 py-1 rounded-full inline-block">
           Confirmed — awaiting payment
         </span>
+        {error && <p className="text-red-500 text-xs">{error}</p>}
+        {cancelSelectionControls}
       </div>
     );
   }

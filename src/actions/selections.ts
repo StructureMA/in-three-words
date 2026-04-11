@@ -176,6 +176,25 @@ export async function deleteSelection(
   const { createAdminClient } = await import("@/lib/supabase/admin");
   const admin = createAdminClient();
 
+  // Safety guard: only pre-paid states can be cancelled from the admin UI.
+  // Anything past `confirmed` has real money attached and needs a refund first.
+  const { data: selection } = await admin
+    .from("selections")
+    .select("status")
+    .eq("id", selectionId)
+    .single();
+
+  if (!selection) {
+    return { success: false, error: "Selection not found" };
+  }
+
+  if (!["drawn", "notified", "confirmed"].includes(selection.status)) {
+    return {
+      success: false,
+      error: "Can't cancel a paid selection. Refund it in Stripe first.",
+    };
+  }
+
   const { error } = await admin
     .from("selections")
     .delete()
