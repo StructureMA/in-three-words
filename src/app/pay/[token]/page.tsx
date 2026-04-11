@@ -1,3 +1,4 @@
+import QRCode from "qrcode";
 import { createAdminClient } from "@/lib/supabase/admin";
 import PaymentClient from "./payment-client";
 
@@ -119,11 +120,26 @@ export default async function PaymentPage({
     entry.word_4,
   ].filter((w: string | null): w is string => w !== null && w.trim() !== "");
 
-  const price = entry.size === "small" ? "$20" : "$25";
+  const priceDollars = entry.size === "small" ? 20 : 25;
+  const price = `$${priceDollars}`;
 
   // If payment is done but shipping wasn't entered (e.g. tab closed after
   // Stripe success), drop the user straight into the address form.
   const needsShippingAfterPayment = isPaid && !hasShipping;
+
+  // Build a Venmo payment deeplink with prefilled amount + note. When scanned
+  // or tapped on a phone with Venmo installed, iOS/Android hand off to the app.
+  const venmoHandle = venmoSetting?.value?.trim() || "";
+  const venmoPaymentUrl = venmoHandle
+    ? `https://venmo.com/u/${encodeURIComponent(venmoHandle)}?txn=pay&amount=${priceDollars}&note=${encodeURIComponent(`${entry.name} - In a Few Words`)}`
+    : "";
+  const venmoQrDataUrl = venmoPaymentUrl
+    ? await QRCode.toDataURL(venmoPaymentUrl, {
+        width: 240,
+        margin: 1,
+        color: { dark: "#1A1A1A", light: "#FFFFFF" },
+      })
+    : "";
 
   return (
     <PaymentClient
@@ -132,7 +148,9 @@ export default async function PaymentPage({
       words={words}
       size={entry.size}
       price={price}
-      venmoHandle={venmoSetting?.value || ""}
+      venmoHandle={venmoHandle}
+      venmoPaymentUrl={venmoPaymentUrl}
+      venmoQrDataUrl={venmoQrDataUrl}
       hasShippingAddress={hasShipping}
       paymentSuccess={success === "true" || needsShippingAfterPayment}
       paymentCanceled={canceled === "true"}

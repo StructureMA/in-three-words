@@ -13,6 +13,8 @@ interface PaymentClientProps {
   size: string;
   price: string;
   venmoHandle: string;
+  venmoPaymentUrl: string;
+  venmoQrDataUrl: string;
   hasShippingAddress: boolean;
   paymentSuccess: boolean;
   paymentCanceled: boolean;
@@ -26,6 +28,8 @@ export default function PaymentClient({
   size,
   price,
   venmoHandle,
+  venmoPaymentUrl,
+  venmoQrDataUrl,
   hasShippingAddress,
   paymentSuccess,
   paymentCanceled,
@@ -257,13 +261,41 @@ export default function PaymentClient({
         </button>
 
         {venmoHandle && (
-          <div className="text-center border-t border-[#E8E6E3] pt-4">
-            <p className="text-sm text-[#6B6B6B] mb-1">Or pay via Venmo</p>
-            <p className="text-base font-semibold text-[#1A1A1A]">
+          <div className="text-center border-t border-[#E8E6E3] pt-5">
+            <p className="text-sm text-[#6B6B6B] mb-3">Or pay via Venmo</p>
+
+            {venmoQrDataUrl && (
+              <div className="flex justify-center mb-3">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={venmoQrDataUrl}
+                  alt={`Venmo QR code for @${venmoHandle}`}
+                  width={180}
+                  height={180}
+                  className="rounded-lg border border-[#E8E6E3]"
+                />
+              </div>
+            )}
+
+            {venmoPaymentUrl && (
+              <a
+                href={preview ? undefined : venmoPaymentUrl}
+                aria-disabled={preview}
+                onClick={preview ? (e) => e.preventDefault() : undefined}
+                className={`inline-block w-full py-3 bg-[#008CFF] text-white rounded-lg font-semibold text-sm hover:bg-[#0070cc] transition-colors mb-2 ${
+                  preview ? "opacity-50 cursor-not-allowed" : ""
+                }`}
+              >
+                Open Venmo to pay {price}
+              </a>
+            )}
+
+            <p className="text-base font-semibold text-[#1A1A1A] mt-2">
               @{venmoHandle}
             </p>
             <p className="text-xs text-[#999] mt-1">
-              Include your name in the note. We&apos;ll confirm manually.
+              Scan on desktop, or tap the button on your phone. We&apos;ll
+              confirm your payment within an hour.
             </p>
           </div>
         )}
